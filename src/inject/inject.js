@@ -11,9 +11,11 @@
     this.settings = {
       search_template: [
         '<div class="SentrySearch-search">',
-          '<h6>Search</h6>',
-          '<form method="GET">',
-            '<input type="text" name="SentrySearch" value="" placeholder="Finally, you can search in Sentry!">',
+          '<h6 title="SentrySearch Chrome Extension">ˁ˚ᴥ˚ˀ</h6>',
+          '<form method="GET" class="clearfix">',
+            '<input type="text" name="SentrySearch" value="" placeholder="Finally, you can search in Sentry!" required>',
+            '<div class="pull-left"><a class="action-go btn btn-primary">Go fetch!</a></div>',
+            '<div class="pull-right"><a class="action-index btn">Update Index</a></div>',
           '</form>',
         '</div>'
       ].join('')
@@ -44,6 +46,7 @@
 
       if ($this.find('.SentrySearch-search').length === 0) {
         that.search = $(that.settings.search_template);
+        that.searchForm = that.search.find('form');
         $this.prepend(that.search);
         that.bindHandlers();
       }
@@ -54,19 +57,27 @@
   };
 
   SentrySearch.prototype.bindHandlers = function () {
-    var that = this;
+    var that = this,
+        $input = this.search.find('input[name="SentrySearch"]'),
+        $goButton = this.search.find('a.action-go'),
+        $indexButton = this.search.find('a.action-index');
 
     // Safety, never actually submit our form
-    this.search.find('form').submit(function () { return false; });
+    this.searchForm.submit(function () { return false; });
 
     // Bindings
-    this.search.find('input[name="SentrySearch"]').change(function () {
-      that.search($(this).val());
-    });
+    $goButton.click(function () { that.doSearch($input.val()); return false; });
+    $indexButton.click(function () { that.startIndexing(); return false; });
   };
 
-  SentrySearch.prototype.search = function(string) {
-    console.log(string, 'SentrySearch');
+  SentrySearch.prototype.doSearch = function(string) {
+    this.searchForm.submit(); // Abuse to run the validation
+    console.log(string, 'Actually search for..');
+  };
+
+  SentrySearch.prototype.startIndexing = function() {
+    // See: http://stackoverflow.com/questions/14251008/chrome-extension-to-open-link-in-new-tab-no-error-but-does-nothing-on-click
+    console.log('TODO: Actually start the indexer.');
   };
 
 
