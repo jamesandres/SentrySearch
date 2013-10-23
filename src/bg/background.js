@@ -15,34 +15,24 @@ var contexts = {
 function handleContextMenuClick(info, tab) {
   switch (info.menuItemId) {
     case contexts.copyColumn:
-      chrome.tabs.sendMessage(tab.id, { columnCopyContextMenuClick: 'copyColumn' });
+      chrome.tabs.sendMessage(tab.id, { SentrySearchContextMenuClick: 'copyColumn' });
       break;
     case contexts.copyTable:
-      chrome.tabs.sendMessage(tab.id, { columnCopyContextMenuClick: 'copyTable' });
+      chrome.tabs.sendMessage(tab.id, { SentrySearchContextMenuClick: 'copyTable' });
       break;
   }
 }
 
 chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {
-  if (message.toCopy) {
-    var textarea = document.getElementById("clipboardBridge");
-    textarea.value = message.toCopy;
-    textarea.focus();
-    textarea.select();
-    document.execCommand('copy');
-  }
-  else if (message.gaTrackEvent) {
+  if (message.gaTrackEvent) {
     _gaq.push(['_trackEvent', message.gaTrackEvent, message.gaTrackEvent]);
   }
 });
 
 chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
-  // TODO: Fix this duplication of defaultOptions from options.js
-  var defaultOptions = { columnHotkey: 'alt', tableHotkey: 'alt+shift' };
-
   if (request.method == 'getOptions') {
     sendResponse({
-      options: localStorage.options ? JSON.parse(localStorage.options) : defaultOptions
+      options: localStorage.options ? JSON.parse(localStorage.options) : {}
     });
   }
   else {

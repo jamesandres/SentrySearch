@@ -1,9 +1,9 @@
 {
-  "name": "ColumnCopy",
-  "version": "0.3.2",
+  "name": "SentrySearch",
+  "version": "0.1.0",
   "manifest_version": 2,
-  "description": "Enables copying columns from tables.",
-  "homepage_url": "https://github.com/jamesandres/ColumnCopy",
+  "description": "Enables searching in Sentry.",
+  "homepage_url": "https://github.com/jamesandres/SentrySearch",
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
@@ -13,7 +13,6 @@
     "page": "src/bg/background.html",
     "persistent": true
   },
-  "options_page": "src/options/index.html",
   "permissions": [
     "clipboardWrite",
     "contextMenus"
@@ -22,13 +21,11 @@
   "content_scripts": [
     {
       "matches": [
-        "file://*/*",
-        "http://*/*",
-        "https://*/*"
+        "http://app.getsentry.com/*",
+        "https://app.getsentry.com/*"
       ],
       "js": [
         "js/jquery/jquery.min.js",
-        "js/jquery.hotkeys/jquery.hotkeys.min.js",
         "src/inject/inject.js"
       ],
       "css": [
